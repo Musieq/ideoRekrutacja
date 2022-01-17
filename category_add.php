@@ -8,18 +8,18 @@ require_once 'includes/header.php';
         <div class="col-lg-5">
             <h3>Dodaj kategorię</h3>
 
-            <form action="index.php" method="post">
+            <form action="index.php" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="categoryName" class="form-label">Nazwa kategorii</label>
-                    <input type="text" class="form-control" id="categoryName" name="categoryName">
+                    <input type="text" class="form-control" id="categoryName" name="categoryName" minlength="1" maxlength="255" required>
                 </div>
                 <div class="mb-3">
                     <label for="categoryParent" class="form-label">Kategoria nadrzędna</label>
-                    <select class="form-select" aria-label="idk" id="categoryParent">
+                    <select class="form-select" aria-label="Kategorie nadrzędne" id="categoryParent" required>
                         <option selected value="0">Wybierz kategorię nadrzędną</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+
+                        <!-- TODO: list of categories with levels -->
+
                     </select>
                 </div>
 
