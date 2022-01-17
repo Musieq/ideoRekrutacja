@@ -17,7 +17,7 @@ require_once 'includes/header.php';
 
                 if (!$category->errorsOccured()) {
                     // Add category
-
+                    $category->addCategory();
                 } else {
                     // Display errors
                     $category->displayErrorMsg();

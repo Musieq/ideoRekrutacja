@@ -27,7 +27,9 @@ class Category {
 
 
     public function addCategory() {
+        global $db;
 
+        $db->query("INSERT INTO tree(name, parent_id) VALUES (?, ?)", $this->name, $this->parentID);
     }
 
 
