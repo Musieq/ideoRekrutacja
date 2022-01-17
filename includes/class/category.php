@@ -6,12 +6,14 @@ class Category {
     private int $ID;
     private string $name;
     private int $parentID;
-    public array $errors = [];
+    private array $errors = [];
 
 
     public function __construct($name, $parentID) {
-        $this->name = $name;
-        $this->parentID = $parentID;
+        if ($this->validateData($name, $parentID)) {
+            $this->name = $name;
+            $this->parentID = $parentID;
+        }
     }
 
     public function getAllCategories() {
@@ -29,21 +31,6 @@ class Category {
     }
 
 
-    public function validateData() {
-        if (strlen($this->name) < 1) {
-            $this->errors += ['Nazwa kategorii nie może być pusta.'];
-        } elseif (strlen($this->name) > 255) {
-            $this->errors += ['Nazwa kategorii jest dłuższa niż 255 znaków.'];
-        }
-
-        if (empty($this->errors)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     public function displayErrorMsg() {
         ?>
         <div class="alert alert-danger" role="alert">
@@ -57,8 +44,58 @@ class Category {
     }
 
 
-    private function categoryExist() {
+    public function errorsOccured(): bool {
+        if (!empty($this->errors)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
+    private function validateData($name, $parentID): bool {
+        // Check length of category name
+        if (is_string($name)) {
+            if (strlen($name) < 1) {
+                $this->errors += ['Nazwa kategorii nie może być pusta.'];
+            } elseif (strlen($name) > 255) {
+                $this->errors += ['Nazwa kategorii jest dłuższa niż 255 znaków.'];
+            }
+        } else {
+            $this->errors += ['Nazwa kategorii nie jest tekstem.'];
+        }
+
+
+        // Check if parent ID is numeric and if it exists (if different than 0)
+        if (is_numeric($parentID)) {
+            if ($parentID != 0) {
+                if (!$this->categoryExist($parentID)) {
+                    $this->errors += ['Kategoria nadrzędna o podanym ID nie istnieje.'];
+                }
+            }
+        } else {
+            $this->errors += ['Błędne ID kategorii nadrzędnej.'];
+        }
+
+
+        // Return true if no errors
+        if (empty($this->errors)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function categoryExist($parentID): bool {
+        global $db;
+
+        $numRows = $db->query("SELECT id FROM tree WHERE id = ?", $parentID)->numRows();
+
+        if ($numRows == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

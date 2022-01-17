@@ -15,12 +15,12 @@ require_once 'includes/header.php';
 
                 $category = new Category($categoryName, $categoryParent);
 
-                if ($category->validateData()) {
-                    // Add category to DB
+                if (!$category->errorsOccured()) {
+                    // Add category
+
                 } else {
                     // Display errors
                     $category->displayErrorMsg();
-
                 }
             }
             ?>
