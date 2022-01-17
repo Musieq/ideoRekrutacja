@@ -13,9 +13,10 @@ require_once 'includes/header.php';
                 $categoryName = $_POST['categoryName'];
                 $categoryParent = $_POST['categoryParent'];
 
-                $category = new Category($categoryName, $categoryParent);
+                $category = new Category();
 
-                if (!$category->errorsOccured()) {
+
+                if ($category->validateData($categoryName, $categoryParent)) {
                     // Add category
                     $category->addCategory();
                 } else {

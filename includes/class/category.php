@@ -9,12 +9,6 @@ class Category {
     private array $errors = [];
 
 
-    public function __construct($name, $parentID) {
-        if ($this->validateData($name, $parentID)) {
-            $this->name = $name;
-            $this->parentID = $parentID;
-        }
-    }
 
     public function getAllCategories() {
 
@@ -46,16 +40,7 @@ class Category {
     }
 
 
-    public function errorsOccured(): bool {
-        if (!empty($this->errors)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    private function validateData($name, $parentID): bool {
+    public function validateData($name, $parentID): bool {
         // Check length of category name
         if (is_string($name)) {
             if (strlen($name) < 1) {
@@ -82,6 +67,8 @@ class Category {
 
         // Return true if no errors
         if (empty($this->errors)) {
+            $this->name = $name;
+            $this->parentID = $parentID;
             return true;
         } else {
             return false;
