@@ -7,6 +7,7 @@ class Category {
     private string $name;
     private int $parentID;
     private array $errors = [];
+    private array $success = [];
 
 
     public function editCategory($categoryName, $categoryParent, $categoryID) {
@@ -15,7 +16,7 @@ class Category {
             // Edit category
             $this->updateDB();
 
-            //$this->displaySuccessMsg();
+            $this->displaySuccessMsg('edit');
         } else {
             // Display errors
             $this->displayErrorMsg();
@@ -81,10 +82,25 @@ class Category {
     }
 
 
-    public function addCategory() {
+    public function addCategory($categoryName, $categoryParent) {
+        // Validate data
+        if ($this->validateData($categoryName, $categoryParent)) {
+            // Add category
+            $this->addCategoryToDB();
+
+            $this->displaySuccessMsg('add');
+        } else {
+            // Display errors
+            $this->displayErrorMsg();
+        }
+    }
+
+
+    private function addCategoryToDB() {
         global $db;
 
         $db->query("INSERT INTO tree(name, parent_id) VALUES (?, ?)", $this->name, $this->parentID);
+
     }
 
 
@@ -95,7 +111,7 @@ class Category {
     }
 
 
-    public function displayErrorMsg() {
+    private function displayErrorMsg() {
         ?>
         <div class="alert alert-danger" role="alert">
             <?php
@@ -108,7 +124,30 @@ class Category {
     }
 
 
-    public function validateData($name, $parentID, $categoryID = false): bool {
+    private function displaySuccessMsg($success) {
+        switch ($success){
+            case 'add':
+                $this->success += ['Kategoria dodana pomyślnie.'];
+                break;
+
+            case 'edit':
+                $this->success += ['Kategoria edytowana pomyślnie. <a href="category_add.php">Powrót do zarządzania kategoriami.</a>'];
+                break;
+        }
+
+        ?>
+        <div class="alert alert-info" role="alert">
+            <?php
+            foreach ($this->success as $msg) {
+                echo "<p class='mb-0'>" . $msg . "</p>";
+            }
+            ?>
+        </div>
+        <?php
+    }
+
+
+    private function validateData($name, $parentID, $categoryID = false): bool {
         // Check if category name is string and it's length
         if (is_string($name)) {
             if (strlen($name) < 1) {
@@ -134,12 +173,14 @@ class Category {
 
 
         // Check if category ID is numeric and if it exists
-        if (is_numeric($categoryID)) {
-            if (!$this->categoryExist($categoryID)) {
-                $this->errors += ['Kategoria o podanym ID nie istnieje.'];
+        if($categoryID != false) {
+            if (is_numeric($categoryID)) {
+                if (!$this->categoryExist($categoryID)) {
+                    $this->errors += ['Kategoria o podanym ID nie istnieje.'];
+                }
+            } else {
+                $this->errors += ['Błędne ID kategorii.'];
             }
-        } else {
-            $this->errors += ['Błędne ID kategorii.'];
         }
 
 

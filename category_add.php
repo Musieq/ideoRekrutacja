@@ -15,14 +15,9 @@ $category = new Category();
                 $categoryName = $_POST['categoryName'];
                 $categoryParent = $_POST['categoryParent'];
 
-                // Validate data
-                if ($category->validateData($categoryName, $categoryParent)) {
-                    // Add category
-                    $category->addCategory();
-                } else {
-                    // Display errors
-                    $category->displayErrorMsg();
-                }
+
+                $category->addCategory($categoryName, $categoryParent);
+
             }
             ?>
 
