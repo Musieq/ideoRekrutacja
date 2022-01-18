@@ -1,5 +1,7 @@
 <?php
 require_once 'includes/header.php';
+
+$category = new Category();
 ?>
 
 
@@ -13,9 +15,7 @@ require_once 'includes/header.php';
                 $categoryName = $_POST['categoryName'];
                 $categoryParent = $_POST['categoryParent'];
 
-                $category = new Category();
-
-
+                // Validate data
                 if ($category->validateData($categoryName, $categoryParent)) {
                     // Add category
                     $category->addCategory();
@@ -39,7 +39,9 @@ require_once 'includes/header.php';
                     <select class="form-select" aria-label="Kategorie nadrzędne" id="categoryParent" name="categoryParent" required>
                         <option selected value="0">Wybierz kategorię nadrzędną</option>
 
-                        <!-- TODO: list of categories with levels -->
+                        <?php
+                        $category->displayCategoryTreeInSelectField();
+                        ?>
 
                     </select>
                 </div>
@@ -50,6 +52,27 @@ require_once 'includes/header.php';
 
         <div class="col-lg-7">
             <h3>Kategorie</h3>
+
+
+                <?php
+                //$category->displayCategoryTree();
+                $category->displayCategoryList();
+                ?>
+
+
+<!--            <ul>
+                <li data-bs-toggle="collapse" data-bs-target="#test">
+                    Coś tam
+                    <ul class="collapse" id="test">
+                        <li data-bs-toggle="collapse" data-bs-target="#test2">TEST2
+                            <ul class="collapse" id="test2">
+                                <li>TEST333</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </li>
+            </ul>-->
         </div>
     </div>
 </div>
