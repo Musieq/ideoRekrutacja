@@ -7,7 +7,6 @@ class Category {
     private string $name;
     private int $parentID;
     private array $errors = [];
-    private array $sortedTreeArr;
 
 
     public function getAllCategories() {
@@ -32,34 +31,30 @@ class Category {
     public function displayCategoryList() {
         global $db;
 
-        $this->makeListRecursive($db->query("SELECT * FROM tree")->fetchAll());
-
-        $this->printListRecursive($this->sortedTreeArr);
+        $this->printListRecursive($db->query("SELECT * FROM tree")->fetchAll());
     }
 
-    private function makeListRecursive($list, $parentID = 0) {
-        for ($i = 0; $i < count($list); $i++) {
-            if ($list[$i]['parent_id'] == $parentID) {
-                $this->makeListRecursive($list, $list[$i]['id']);
-                $this->sortedTreeArr[] = $list[$i];
-            }
-        }
-    }
 
     private function printListRecursive($list, $parentID = 0) {
         $foundSome = false;
         for ($i = 0, $c = count($list); $i < $c; $i++) {
             if ($list[$i]['parent_id'] == $parentID) {
                 if ($foundSome == false) {
-                    echo '<ul>';
+                    if ($i == 0) {
+                        echo "<ul>";
+                    } else {
+                        echo "<ul class='collapse' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
+                    }
+
                     $foundSome = true;
                 }
-                echo '<li>' . $list[$i]['name'] . '</li>';
+                echo "<li data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>" . $list[$i]['name'];
                 $this->printListRecursive($list, $list[$i]['id']);
+                echo "</li>";
             }
         }
         if ($foundSome) {
-            echo '</ul>';
+            echo "</ul>";
         }
     }
 

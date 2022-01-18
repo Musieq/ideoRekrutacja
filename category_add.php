@@ -55,24 +55,10 @@ $category = new Category();
 
 
                 <?php
-                //$category->displayCategoryTree();
                 $category->displayCategoryList();
                 ?>
 
 
-<!--            <ul>
-                <li data-bs-toggle="collapse" data-bs-target="#test">
-                    Coś tam
-                    <ul class="collapse" id="test">
-                        <li data-bs-toggle="collapse" data-bs-target="#test2">TEST2
-                            <ul class="collapse" id="test2">
-                                <li>TEST333</li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                </li>
-            </ul>-->
         </div>
     </div>
 </div>
