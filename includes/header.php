@@ -11,6 +11,12 @@ require_once 'includes/init.php';
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
     <title>Ideo rekrutacja</title>
 </head>
 <body>
