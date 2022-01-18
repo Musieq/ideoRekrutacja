@@ -37,18 +37,19 @@ class Category {
 
     private function printListRecursive($list, $parentID = 0) {
         $foundSome = false;
-        for ($i = 0, $c = count($list); $i < $c; $i++) {
+        for ($i = 0; $i < count($list); $i++) {
             if ($list[$i]['parent_id'] == $parentID) {
                 if ($foundSome == false) {
                     if ($i == 0) {
-                        echo "<ul>";
+                        echo "<ul id='categoryContainer'>";
                     } else {
-                        echo "<ul class='collapse' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
+                        echo "<ul class='collapse show' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
                     }
 
                     $foundSome = true;
                 }
-                echo "<li data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>" . $list[$i]['name'];
+                echo "<li class='categoryList'>" . $list[$i]['name'];
+                echo "<span data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>COLLAPSE</span>";
                 $this->printListRecursive($list, $list[$i]['id']);
                 echo "</li>";
             }
