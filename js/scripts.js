@@ -6,7 +6,7 @@
     }
 
     categoryList.forEach(el => {
-        if (el.childElementCount === 1) {
+        if (el.childElementCount === 2) {
             let child = el.firstElementChild;
             el.removeChild(child);
         }
