@@ -16,14 +16,19 @@ class Category {
     }
 
 
-    public function displayCategoryTreeInSelectField($parentID = 0, $hierarchy = '') {
+    public function displayCategoryTreeInSelectField($currentParentID = false, $parentID = 0, $hierarchy = '') {
         global $db;
 
         $categories = $db->query("SELECT id, name FROM tree WHERE parent_id = $parentID")->fetchAll();
         foreach ($categories as $values) {
-            echo "<option value='{$values['id']}'>{$hierarchy} {$values['name']}</option>";
+            if ($currentParentID != $values['id']) {
+                echo "<option value='{$values['id']}'>{$hierarchy} {$values['name']}</option>";
+            } else {
+                echo "<option selected value='{$values['id']}'>{$hierarchy} {$values['name']}</option>";
+            }
 
-            $this->displayCategoryTreeInSelectField($values['id'], $hierarchy . '—');
+
+            $this->displayCategoryTreeInSelectField($currentParentID, $values['id'], $hierarchy . '—');
         }
     }
 
