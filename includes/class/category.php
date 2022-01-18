@@ -41,7 +41,7 @@ class Category {
             if ($list[$i]['parent_id'] == $parentID) {
                 if ($foundSome == false) {
                     if ($i == 0) {
-                        echo "<ul id='categoryContainer'>";
+                        echo "<ul id='categoryContainer' class='list-group list-group-flush'>";
                     } else {
                         echo "<ul class='collapse show' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
                     }
@@ -49,7 +49,11 @@ class Category {
                     $foundSome = true;
                 }
                 echo "<li class='categoryList'>" . $list[$i]['name'];
-                echo "<span data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>COLLAPSE</span>";
+                echo "<span data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>
+                        <div class='categoryTreeArrow'>
+                        <i class='bi bi-arrow-up'></i>
+                        </div>                    
+                        </span>";
                 $this->printListRecursive($list, $list[$i]['id']);
                 echo "</li>";
             }

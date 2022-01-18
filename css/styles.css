@@ -1,0 +1,14 @@
+ul#categoryContainer ul {
+    list-style-type: disc !important;
+}
+
+span.collapsed div.categoryTreeArrow {
+    transform: rotate(180deg);
+
+}
+
+span div.categoryTreeArrow {
+    transition: transform 0.15s ease;
+    display: inline-block;
+    margin-left: .5rem;
+}
