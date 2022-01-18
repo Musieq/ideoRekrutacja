@@ -1,7 +1,7 @@
 <?php
 require_once 'includes/header.php';
 
-if (!isset($_GET['id']) || !isset($_GET['name']) || !isset($_GET['parent_id'])) {
+if ((!isset($_GET['id']) || !isset($_GET['name']) || !isset($_GET['parent_id'])) || ($_GET['id'] === '' || $_GET['name'] === '' || $_GET['parent_id'] === '')) {
     header('Location: category_add.php');
     exit;
 }
@@ -19,12 +19,19 @@ $category = new Category();
             if (isset($_POST['categoryEdit'])) {
                 $categoryName = $_POST['categoryName'];
                 $categoryParent = $_POST['categoryParent'];
+                $categoryID = $_POST['categoryID'];
 
+                // Update $_GET for form autofill
+                $_GET['id'] = $categoryID;
+                $_GET['name'] = $categoryName;
+                $_GET['parent_id'] = $categoryParent;
+
+                $category->editCategory($categoryName, $categoryParent, $categoryID);
 
             }
             ?>
 
-            <form action="category_edit.php" method="post">
+            <form action="category_edit.php?id=<?=$_GET['id']?>&name=<?=$_GET['name']?>&parent_id=<?=$_GET['parent_id']?>" method="post">
                 <div class="mb-3">
                     <label for="categoryName" class="form-label">Nazwa kategorii</label>
                     <input type="text" class="form-control" value="<?=$_GET['name']?>" id="categoryName" name="categoryName" minlength="1" maxlength="255" required>

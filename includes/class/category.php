@@ -9,10 +9,17 @@ class Category {
     private array $errors = [];
 
 
-    public function getAllCategories() {
-        global $db;
+    public function editCategory($categoryName, $categoryParent, $categoryID) {
+        // Validate data
+        if ($this->validateData($categoryName, $categoryParent, $categoryID)) {
+            // Edit category
+            $this->updateDB();
 
-        return $db->query("SELECT * FROM tree")->fetchAll();
+            //$this->displaySuccessMsg();
+        } else {
+            // Display errors
+            $this->displayErrorMsg();
+        }
     }
 
 
@@ -81,6 +88,13 @@ class Category {
     }
 
 
+    private function updateDB() {
+        global $db;
+
+        $db->query("UPDATE tree SET name = ?, parent_id = ? WHERE id = ?", $this->name, $this->parentID, $this->ID);
+    }
+
+
     public function displayErrorMsg() {
         ?>
         <div class="alert alert-danger" role="alert">
@@ -94,7 +108,7 @@ class Category {
     }
 
 
-    public function validateData($name, $parentID): bool {
+    public function validateData($name, $parentID, $categoryID = false): bool {
         // Check if category name is string and it's length
         if (is_string($name)) {
             if (strlen($name) < 1) {
@@ -119,10 +133,23 @@ class Category {
         }
 
 
+        // Check if category ID is numeric and if it exists
+        if (is_numeric($categoryID)) {
+            if (!$this->categoryExist($categoryID)) {
+                $this->errors += ['Kategoria o podanym ID nie istnieje.'];
+            }
+        } else {
+            $this->errors += ['Błędne ID kategorii.'];
+        }
+
+
         // Return true if no errors and assign values to variables
         if (empty($this->errors)) {
             $this->name = $name;
             $this->parentID = $parentID;
+            if ($categoryID) {
+                $this->ID = $categoryID;
+            }
             return true;
         } else {
             return false;
