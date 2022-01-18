@@ -53,7 +53,12 @@ class Category {
                         <div class='categoryTreeArrow'>
                         <i class='bi bi-arrow-up'></i>
                         </div>                    
-                        </span>";
+                        </span>
+                        <div class='btnContainer float-end'>
+                            <div class='d-inline-block'><a href='category_edit.php?id=" . $list[$i]['id'] . "&name=" . $list[$i]['name'] . "&parent_id=" . $list[$i]['parent_id'] . "'>Edit</a></div>
+                            <div class='d-inline-block'><a class='link-danger' href='category_add.php?delete=1&id=" . $list[$i]['id'] . "'>Delete</a></div> 
+                        </div> 
+                        ";
                 $this->printListRecursive($list, $list[$i]['id']);
                 echo "</li>";
             }
