@@ -12,7 +12,7 @@ class Category {
 
     public function editCategory($categoryName, $categoryParent, $categoryID) {
         // Validate data
-        if ($this->validateData($categoryName, $categoryParent, $categoryID)) {
+        if ($this->validateData($categoryName, $categoryParent) && $this->validateID($categoryID)) {
             // Edit category
             $this->updateDB();
 
@@ -125,15 +125,10 @@ class Category {
 
 
     private function displaySuccessMsg($success) {
-        switch ($success){
-            case 'add':
-                $this->success += ['Kategoria dodana pomyślnie.'];
-                break;
-
-            case 'edit':
-                $this->success += ['Kategoria edytowana pomyślnie. <a href="category_add.php">Powrót do zarządzania kategoriami.</a>'];
-                break;
-        }
+        $this->success += match ($success) {
+            'add' => ['Kategoria dodana pomyślnie.'],
+            'edit' => ['Kategoria edytowana pomyślnie. <a href="category_add.php">Powrót do zarządzania kategoriami.</a>'],
+        };
 
         ?>
         <div class="alert alert-info" role="alert">
@@ -147,7 +142,7 @@ class Category {
     }
 
 
-    private function validateData($name, $parentID, $categoryID = false): bool {
+    private function validateData($name, $parentID): bool {
         // Check if category name is string and it's length
         if (is_string($name)) {
             if (strlen($name) < 1) {
@@ -172,25 +167,35 @@ class Category {
         }
 
 
-        // Check if category ID is numeric and if it exists
-        if($categoryID != false) {
-            if (is_numeric($categoryID)) {
-                if (!$this->categoryExist($categoryID)) {
-                    $this->errors += ['Kategoria o podanym ID nie istnieje.'];
-                }
-            } else {
-                $this->errors += ['Błędne ID kategorii.'];
-            }
-        }
+
 
 
         // Return true if no errors and assign values to variables
         if (empty($this->errors)) {
             $this->name = $name;
             $this->parentID = $parentID;
-            if ($categoryID) {
-                $this->ID = $categoryID;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function validateID($categoryID): bool {
+
+        // Check if category ID is numeric and if it exists
+        if (is_numeric($categoryID)) {
+            if (!$this->categoryExist($categoryID)) {
+                $this->errors += ['Kategoria o podanym ID nie istnieje.'];
             }
+        } else {
+            $this->errors += ['Błędne ID kategorii.'];
+        }
+
+
+        // Return true if no errors and assign values to variables
+        if (empty($this->errors)) {
+            $this->ID = $categoryID;
             return true;
         } else {
             return false;
