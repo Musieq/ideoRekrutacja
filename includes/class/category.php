@@ -24,6 +24,20 @@ class Category {
     }
 
 
+    public function deleteCategory($categoryID) {
+        // Validate ID
+        if ($this->validateID($categoryID)) {
+            // Delete category
+            $this->deleteCategoryFromDB();
+
+            $this->displaySuccessMsg('delete');
+        } else {
+            // Display errors
+            $this->displayErrorMsg();
+        }
+    }
+
+
     public function displayCategoryTreeInSelectField($currentParentID = false, $parentID = 0, $hierarchy = '') {
         global $db;
 
@@ -111,6 +125,20 @@ class Category {
     }
 
 
+    private function deleteCategoryFromDB() {
+        global $db;
+
+        // Get parent_id of this category
+        $parentID = $db->query("SELECT parent_id FROM tree WHERE id = ?", $this->ID)->fetchAll();
+        $parentID = $parentID[0]['parent_id'];
+        // Delete category
+        $db->query("DELETE FROM tree WHERE id = ?", $this->ID);
+
+        // Update parent_id for children
+        $db->query("UPDATE tree SET parent_id = $parentID WHERE parent_id = $this->ID");
+    }
+
+
     private function displayErrorMsg() {
         ?>
         <div class="alert alert-danger" role="alert">
@@ -128,6 +156,7 @@ class Category {
         $this->success += match ($success) {
             'add' => ['Kategoria dodana pomyślnie.'],
             'edit' => ['Kategoria edytowana pomyślnie. <a href="category_add.php">Powrót do zarządzania kategoriami.</a>'],
+            'delete' => ['Kategoria została usunięta pomyślnie.'],
         };
 
         ?>
