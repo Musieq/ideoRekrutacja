@@ -58,7 +58,7 @@ $category = new Category();
 
 
                 <?php
-                $category->displayCategoryList();
+                $category->displayCategoryList(true);
                 ?>
 
 
