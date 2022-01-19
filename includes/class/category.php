@@ -132,7 +132,7 @@ class Category {
     private function addCategoryToDB() {
         global $db;
 
-        if ($lastOrder = $this->getLastOrder()) {
+        if ($lastOrder = $this->getLastOrder($this->parentID)) {
             $lastOrder = $lastOrder[0]['cat_order'] + 1;
             $db->query("INSERT INTO tree(name, parent_id, cat_order) VALUES (?, ?, ?)", $this->name, $this->parentID, $lastOrder);
         } else {
@@ -148,10 +148,10 @@ class Category {
     }
 
 
-    private function getLastOrder() {
+    private function getLastOrder($parentID) {
         global $db;
 
-        return $db->query("SELECT cat_order FROM tree WHERE parent_id = ? ORDER BY cat_order DESC LIMIT 1", $this->parentID)->fetchAll();
+        return $db->query("SELECT cat_order FROM tree WHERE parent_id = ? ORDER BY cat_order DESC LIMIT 1", $parentID)->fetchAll();
     }
 
 
