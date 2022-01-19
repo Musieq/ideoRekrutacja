@@ -1,4 +1,4 @@
-/** Remove collapse buttons from last elements **/
+/** Remove collapse arrows from last elements **/
 (function() {
     const categoryList = document.querySelectorAll('.categoryList');
     if (!categoryList) {
@@ -6,7 +6,8 @@
     }
 
     categoryList.forEach(el => {
-        if (el.childElementCount === 2) {
+        let hasChild = el.querySelector("ul") != null;
+        if (!hasChild) {
             let child = el.firstElementChild;
             el.removeChild(child);
         }
