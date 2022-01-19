@@ -38,6 +38,23 @@ class Category {
     }
 
 
+    public function changeCategoryOrder($catOrder) {
+        $catOrderArr = $this->createCategoryArray($catOrder);
+
+    }
+
+    private function createCategoryArray($catOrder): array {
+        $catOrder = explode(', ',$catOrder);
+
+        $catOrderArr = [];
+        foreach ($catOrder as $value) {
+            $catOrderArr[] = explode(' => ',$value);
+        }
+
+        return $catOrderArr;
+    }
+
+
     public function displayCategoryTreeInSelectField($currentParentID = false, $parentID = 0, $hierarchy = '') {
         global $db;
 
@@ -68,14 +85,14 @@ class Category {
             if ($list[$i]['parent_id'] == $parentID) {
                 if ($foundSome == false) {
                     if ($i == 0) {
-                        echo "<ul id='categoryContainer' class='list-group list-group-flush'>";
+                        echo "<ul id='categoryContainer' class='categorySort' data-parent-id='" . $list[$i]['parent_id'] . "'>";
                     } else {
-                        echo "<ul class='collapse show' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
+                        echo "<ul class='collapse show categorySort' data-parent-id='" . $list[$i]['parent_id'] . "' id='collapse_id_" . $list[$i]['parent_id'] . "'>";
                     }
 
                     $foundSome = true;
                 }
-                echo "<li class='categoryList'>" . $list[$i]['name'];
+                echo "<li class='categoryList' data-id='" . $list[$i]['id'] . "'>" . $list[$i]['name'];
                 echo "<span data-bs-toggle='collapse' data-bs-target='#collapse_id_" . $list[$i]['id'] . "'>
                         <div class='categoryTreeArrow'>
                         <i class='bi bi-arrow-up'></i>
@@ -115,8 +132,12 @@ class Category {
     private function addCategoryToDB() {
         global $db;
 
-        $db->query("INSERT INTO tree(name, parent_id) VALUES (?, ?)", $this->name, $this->parentID);
-
+        if ($lastOrder = $this->getLastOrder()) {
+            $lastOrder = $lastOrder[0]['cat_order'] + 1;
+            $db->query("INSERT INTO tree(name, parent_id, cat_order) VALUES (?, ?, ?)", $this->name, $this->parentID, $lastOrder);
+        } else {
+            $db->query("INSERT INTO tree(name, parent_id) VALUES (?, ?)", $this->name, $this->parentID);
+        }
     }
 
 
@@ -124,6 +145,13 @@ class Category {
         global $db;
 
         $db->query("UPDATE tree SET name = ?, parent_id = ? WHERE id = ?", $this->name, $this->parentID, $this->ID);
+    }
+
+
+    private function getLastOrder() {
+        global $db;
+
+        return $db->query("SELECT cat_order FROM tree WHERE parent_id = ? ORDER BY cat_order DESC LIMIT 1", $this->parentID)->fetchAll();
     }
 
 
