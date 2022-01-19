@@ -55,14 +55,14 @@ class Category {
     }
 
 
-    public function displayCategoryList() {
+    public function displayCategoryList($printBtn) {
         global $db;
 
-        $this->printListRecursive($db->query("SELECT * FROM tree")->fetchAll());
+        $this->printListRecursive($db->query("SELECT * FROM tree")->fetchAll(), $printBtn);
     }
 
 
-    private function printListRecursive($list, $parentID = 0) {
+    private function printListRecursive($list, $printBtn = false, $parentID = 0) {
         $foundSome = false;
         for ($i = 0; $i < count($list); $i++) {
             if ($list[$i]['parent_id'] == $parentID) {
@@ -80,13 +80,15 @@ class Category {
                         <div class='categoryTreeArrow'>
                         <i class='bi bi-arrow-up'></i>
                         </div>                    
-                        </span>
-                        <div class='btnContainer float-end'>
-                            <div class='d-inline-block'><a href='category_edit.php?id=" . $list[$i]['id'] . "&name=" . $list[$i]['name'] . "&parent_id=" . $list[$i]['parent_id'] . "'>Edit</a></div>
-                            <div class='d-inline-block'><a class='link-danger categoryRemove' data-bs-toggle='modal' data-bs-target='#modalDeleteCategory' href='category_add.php?delete=1&id=" . $list[$i]['id'] . "'>Delete</a></div> 
-                        </div> 
-                        ";
-                $this->printListRecursive($list, $list[$i]['id']);
+                        </span>";
+                if ($printBtn) {
+                    echo"   <div class='btnContainer float-end'>
+                                <div class='d-inline-block'><a href='category_edit.php?id=" . $list[$i]['id'] . "&name=" . $list[$i]['name'] . "&parent_id=" . $list[$i]['parent_id'] . "'>Edit</a></div>
+                                <div class='d-inline-block'><a class='link-danger categoryRemove' data-bs-toggle='modal' data-bs-target='#modalDeleteCategory' href='category_add.php?delete=1&id=" . $list[$i]['id'] . "'>Delete</a></div>
+                            </div>";
+                }
+
+                $this->printListRecursive($list, $printBtn, $list[$i]['id']);
                 echo "</li>";
             }
         }
