@@ -13,6 +13,13 @@ class Category {
     public function editCategory($categoryName, $categoryParent, $categoryID) {
         // Validate data
         if ($this->validateData($categoryName, $categoryParent) && $this->validateID($categoryID)) {
+            // Get current parentID
+            global $db;
+            $currentParent = $db->query("SELECT parent_id FROM tree WHERE id = ?", $this->ID)->fetchAll();
+            $currentParent = $currentParent[0]['parent_id'];
+            // Update order
+            $this->reorderCategories($this->parentID, $currentParent, false);
+
             // Edit category
             $this->updateDB();
 
@@ -164,10 +171,25 @@ class Category {
         // Delete category
         $db->query("DELETE FROM tree WHERE id = ?", $this->ID);
 
+        $this->reorderCategories($parentID, $this->ID);
+
         // Update parent_id for children
         $db->query("UPDATE tree SET parent_id = $parentID WHERE parent_id = $this->ID");
     }
 
+    private function reorderCategories($newParentID, $currentParentID, $bulk = true) {
+        global $db;
+
+        if ($lastOrder = $this->getLastOrder($newParentID)){
+            $lastOrder = $lastOrder[0]['cat_order'];
+
+            if ($bulk) {
+                $db->query("UPDATE tree SET cat_order = cat_order + ? WHERE parent_id = ?", $lastOrder, $currentParentID);
+            } else {
+                $db->query("UPDATE tree SET cat_order = $lastOrder + 1 WHERE id = ?", $this->ID);
+            }
+        }
+    }
 
     private function displayErrorMsg() {
         ?>
