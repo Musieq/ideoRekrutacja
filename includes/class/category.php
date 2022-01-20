@@ -17,6 +17,12 @@ class Category {
             global $db;
             $currentParent = $db->query("SELECT parent_id FROM tree WHERE id = ?", $this->ID)->fetchAll();
             $currentParent = $currentParent[0]['parent_id'];
+
+            // Check if category has children. If it has, change their parent_id to $currentParent
+            if ($db->query("SELECT id FROM tree WHERE parent_id = ? LIMIT 1", $this->ID)->fetchAll()) {
+                $db->query("UPDATE tree SET parent_id = ? WHERE parent_id = ?", $currentParent, $this->ID);
+            }
+
             // Update order
             $this->reorderCategories($this->parentID, $currentParent, false);
 
