@@ -1,4 +1,4 @@
-ul#categoryContainer ul {
+ul.categorySort {
     list-style-type: disc !important;
 }
 
