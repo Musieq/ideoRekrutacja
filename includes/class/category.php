@@ -52,7 +52,18 @@ class Category {
 
 
     public function changeCategoryOrder($catOrder) {
+        global $db;
+
         $catOrderArr = $this->createCategoryArray($catOrder);
+
+        foreach ($catOrderArr as $value) {
+            $orderIDs = $value[1];
+            $orderArr = explode(',', $orderIDs);
+
+            foreach ($orderArr as $order => $ID) {
+                $db->query("UPDATE tree SET cat_order = $order + 1 WHERE id = $ID");
+            }
+        }
 
     }
 
