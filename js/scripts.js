@@ -76,16 +76,14 @@ function deleteAndShowModal(deleteBtnClass, deleteBtnModalID) {
 
         // Reset input value
         categoryReorder.value = '';
-        //categoryReorder.value += '[';
         for (const [key, value] of Object.entries(orderArr)) {
-            categoryReorder.value += `${key} => [${value}]`
+            categoryReorder.value += `${key} => ${value}`
 
             if (counter < arrLength) {
                 categoryReorder.value += ', ';
             }
             counter++;
         }
-        //categoryReorder.value += ']';
     }
 })();
 
