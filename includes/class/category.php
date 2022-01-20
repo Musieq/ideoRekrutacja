@@ -65,6 +65,7 @@ class Category {
             }
         }
 
+        $this->displaySuccessMsg('reorder');
     }
 
     private function createCategoryArray($catOrder): array {
@@ -226,6 +227,7 @@ class Category {
             'add' => ['Kategoria dodana pomyślnie.'],
             'edit' => ['Kategoria edytowana pomyślnie. <a href="index.php">Powrót do zarządzania kategoriami.</a>'],
             'delete' => ['Kategoria została usunięta pomyślnie.'],
+            'reorder' => ['Kolejność kategorii zmieniona pomyślnie.']
         };
 
         ?>

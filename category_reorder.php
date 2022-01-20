@@ -3,11 +3,6 @@ require_once 'includes/header.php';
 
 $category = new Category();
 
-if (isset($_POST['categoryReorder'])) {
-    $catOrder = $_POST['categoryOrder'];
-
-    $category->changeCategoryOrder($catOrder);
-}
 ?>
 
 
@@ -18,8 +13,15 @@ if (isset($_POST['categoryReorder'])) {
         <div class="col-lg-7">
             <h3>Zmień kolejność kategorii (przenieś i upuść)</h3>
 
-
             <?php
+            if (isset($_POST['categoryReorder'])) {
+                $catOrder = $_POST['categoryOrder'];
+
+                $category->changeCategoryOrder($catOrder);
+            }
+
+
+
             $category->displayCategoryList(false);
             ?>
             <form action="category_reorder.php" method="post">
