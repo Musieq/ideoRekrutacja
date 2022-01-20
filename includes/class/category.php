@@ -125,7 +125,7 @@ class Category {
                 if ($printBtn) {
                     echo"   <div class='btnContainer float-end'>
                                 <div class='d-inline-block'><a href='category_edit.php?id=" . $list[$i]['id'] . "&name=" . $list[$i]['name'] . "&parent_id=" . $list[$i]['parent_id'] . "'>Edit</a></div>
-                                <div class='d-inline-block'><a class='link-danger categoryRemove' data-bs-toggle='modal' data-bs-target='#modalDeleteCategory' href='category_add.php?delete=1&id=" . $list[$i]['id'] . "'>Delete</a></div>
+                                <div class='d-inline-block'><a class='link-danger categoryRemove' data-bs-toggle='modal' data-bs-target='#modalDeleteCategory' href='index.php?delete=1&id=" . $list[$i]['id'] . "'>Delete</a></div>
                             </div>";
                 }
 
@@ -224,7 +224,7 @@ class Category {
     private function displaySuccessMsg($success) {
         $this->success += match ($success) {
             'add' => ['Kategoria dodana pomyślnie.'],
-            'edit' => ['Kategoria edytowana pomyślnie. <a href="category_add.php">Powrót do zarządzania kategoriami.</a>'],
+            'edit' => ['Kategoria edytowana pomyślnie. <a href="index.php">Powrót do zarządzania kategoriami.</a>'],
             'delete' => ['Kategoria została usunięta pomyślnie.'],
         };
 

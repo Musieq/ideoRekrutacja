@@ -2,7 +2,7 @@
 require_once 'includes/header.php';
 
 if ((!isset($_GET['id']) || !isset($_GET['name']) || !isset($_GET['parent_id'])) || ($_GET['id'] === '' || $_GET['name'] === '' || $_GET['parent_id'] === '')) {
-    header('Location: category_add.php');
+    header('Location: index.php');
     exit;
 }
 

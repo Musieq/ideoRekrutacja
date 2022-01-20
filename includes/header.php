@@ -29,7 +29,7 @@ require_once 'includes/init.php';
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'category_add.php' ? 'active' : '' ?>" <?= basename($_SERVER['PHP_SELF']) == 'category_add.php' ? 'aria-current="page"' : '' ?> href="category_add.php">Zarządzaj kategoriami</a>
+                    <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>" <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'aria-current="page"' : '' ?> href="index.php">Zarządzaj kategoriami</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'category_reorder.php' ? 'active' : '' ?>" <?= basename($_SERVER['PHP_SELF']) == 'category_reorder.php' ? 'aria-current="page"' : '' ?> href="category_reorder.php">Zmień kolejność kategorii</a>
