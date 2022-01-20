@@ -82,7 +82,7 @@ class Category {
     public function displayCategoryTreeInSelectField($currentParentID = false, $parentID = 0, $hierarchy = '') {
         global $db;
 
-        $categories = $db->query("SELECT id, name FROM tree WHERE parent_id = $parentID")->fetchAll();
+        $categories = $db->query("SELECT id, name FROM tree WHERE parent_id = $parentID ORDER BY cat_order")->fetchAll();
         foreach ($categories as $values) {
             if ($currentParentID != $values['id']) {
                 echo "<option value='{$values['id']}'>{$hierarchy} {$values['name']}</option>";
@@ -99,7 +99,7 @@ class Category {
     public function displayCategoryList($printBtn) {
         global $db;
 
-        $this->printListRecursive($db->query("SELECT * FROM tree")->fetchAll(), $printBtn);
+        $this->printListRecursive($db->query("SELECT * FROM tree ORDER BY cat_order")->fetchAll(), $printBtn);
     }
 
 
